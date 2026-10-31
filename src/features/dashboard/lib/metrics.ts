@@ -1,6 +1,6 @@
 import type { AgencyMember } from "@/domain/agency";
 import type { DailyActivity, MonthlySales } from "@/domain/analytics";
-import type { Deal, PipelineStage, PipelineStageId } from "@/domain/deal";
+import { isOpenStage, type Deal, type PipelineStage, type PipelineStageId } from "@/domain/deal";
 import type { LeadSource, LeadSourceId } from "@/domain/lead";
 import type { Property } from "@/domain/property";
 import { dayKey, formatDate } from "@/lib/format";
@@ -123,6 +123,7 @@ export interface StageSummary {
 
 export function summarizePipeline(deals: Deal[], stages: PipelineStage[]) {
   const rows: StageSummary[] = [...stages]
+    .filter((stage) => stage.outcome !== "lost")
     .sort((a, b) => a.order - b.order)
     .map((stage) => {
       const inStage = deals.filter((deal) => deal.stageId === stage.id);
@@ -133,7 +134,7 @@ export function summarizePipeline(deals: Deal[], stages: PipelineStage[]) {
         valuePKR: inStage.reduce((sum, deal) => sum + deal.valuePKR, 0),
       };
     });
-  const open = rows.filter((row) => row.id !== "closed_won");
+  const open = rows.filter((row) => isOpenStage(row.id));
   return {
     stages: rows,
     openCount: open.reduce((sum, row) => sum + row.count, 0),

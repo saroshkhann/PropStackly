@@ -231,3 +231,34 @@ export function interestedPropertyIds(leadId: string, count: number) {
   const seed = [...leadId].reduce((sum, char) => sum + char.charCodeAt(0), 0);
   return [...new Set(Array.from({ length: count }, (_, i) => available[(seed * 7 + i * 13) % available.length]!.id))];
 }
+
+/**
+ * Best listing for a lead's stated requirement: same purpose, same society when possible, closest to budget.
+ * Keeps demo deals and site visits consistent with what the client actually asked for.
+ */
+const interestTypes: [RegExp, PropertyType[]][] = [
+  [/farmhouse/i, ["farmhouse"]],
+  [/commercial plot|commercial/i, ["commercial_plot", "building", "shop"]],
+  [/shop/i, ["shop"]],
+  [/office/i, ["office"]],
+  [/apartment|flat/i, ["apartment"]],
+  [/portion/i, ["portion"]],
+  [/plot/i, ["plot"]],
+  [/house/i, ["house"]],
+];
+
+export function matchingPropertyIds(
+  lead: { intent: "buy" | "rent" | "invest"; interest: string; location: string; budgetMinPKR: number; budgetMaxPKR: number },
+  count = 1,
+) {
+  const purpose = lead.intent === "rent" ? "rent" : "sale";
+  const society = lead.location.split(",")[0]!.trim().toLowerCase();
+  const target = (lead.budgetMinPKR + lead.budgetMaxPKR) / 2;
+  const types = interestTypes.find(([pattern]) => pattern.test(lead.interest))?.[1];
+  const byPurpose = available.filter((p) => p.purpose === purpose);
+  const byType = types ? byPurpose.filter((p) => types.includes(p.type)) : [];
+  const pool = byType.length ? byType : byPurpose;
+  const local = pool.filter((p) => society.includes(p.location.toLowerCase()) || p.location.toLowerCase().includes(society));
+  const ranked = (local.length ? local : pool).sort((a, b) => Math.abs(a.pricePKR - target) - Math.abs(b.pricePKR - target));
+  return ranked.slice(0, count).map((p) => p.id);
+}

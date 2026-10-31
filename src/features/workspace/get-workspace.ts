@@ -3,7 +3,7 @@ import { getTrialStatus } from "@/domain/subscription";
 import { DEMO_CURRENT_USER_ID, demoAgency, demoMembers, demoSubscription } from "@/mocks/agency";
 import { demoLeads } from "@/mocks/leads";
 import { demoNotifications } from "@/mocks/notifications";
-import { demoSchedule } from "@/mocks/schedule";
+import { demoTasks } from "@/mocks/tasks";
 import { dayKey } from "@/lib/format";
 import type { WorkspaceContext } from "./types";
 
@@ -29,7 +29,7 @@ export async function getWorkspace(): Promise<WorkspaceContext> {
     notifications,
     navBadges: {
       newLeads: demoLeads.filter((l) => l.agencyId === agencyId && l.status === "new").length,
-      tasksDueToday: demoSchedule.filter((s) => s.agencyId === agencyId && !s.completedAt && dayKey(s.startsAt) === today).length,
+      tasksDueToday: demoTasks.filter((t) => t.agencyId === agencyId && t.status !== "done" && dayKey(t.dueAt) === today).length,
       unreadNotifications: notifications.filter((n) => !n.read).length,
     },
     now,

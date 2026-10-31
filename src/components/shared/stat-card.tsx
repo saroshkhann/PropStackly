@@ -23,7 +23,7 @@ export function StatCard({ label, value, icon: Icon, hint, tone = "default" }: S
       </span>
       <div className="min-w-0">
         <h3 className="truncate text-[13px] font-medium text-muted-foreground">{label}</h3>
-        <p className="mt-1 text-[22px] leading-none font-semibold tracking-[-0.02em] text-foreground tabular">{value}</p>
+        <p className="mt-1 text-[19px] leading-none font-semibold tracking-[-0.02em] whitespace-nowrap text-foreground tabular sm:text-[22px]">{value}</p>
         {hint && <p className="mt-1.5 line-clamp-2 text-xs text-muted-foreground sm:truncate">{hint}</p>}
       </div>
     </article>

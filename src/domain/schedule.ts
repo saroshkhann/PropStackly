@@ -1,5 +1,10 @@
 import type { TenantScoped } from "./tenancy";
 
+/*
+ * Unified agenda entry used by the dashboard, lead follow-ups, and the nav badge.
+ * Derived from tasks (follow-ups) and site visits rather than stored on its own.
+ */
+
 export type ScheduleItemKind = "site_visit" | "follow_up";
 export type FollowUpChannel = "call" | "whatsapp" | "meeting" | "email";
 

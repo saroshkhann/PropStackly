@@ -98,6 +98,10 @@ Module conventions (follow for new modules):
 - Property pages share a `PropertySessionProvider` (properties layout) so drafts and edits survive client navigation
   within the module until reload. Uploaded photos are local object-URL previews only — never sent anywhere — and are
   revoked when the provider unmounts. Sample listing photos are generated artwork labelled "sample".
+- Pipeline drag-and-drop uses native HTML5 DnD on `md+`; every move is also available from each card's menu (keyboard
+  and touch), and phones get a one-stage-at-a-time list. Moving to Closed lost always asks for a reason.
+- Tasks and site visits are the sources of truth; `ScheduleItem` (dashboard agenda, lead follow-ups, nav badge) is a
+  derived read model built in `mocks/schedule.ts`. Visit outcomes can only be logged once the visit has started.
 - Areas are stored with their unit (`marla | kanal | sqft | sqyd`); convert with `domain/area.ts`. `MARLA_SQFT`
   (225, Lahore society standard) lives in `config/app.ts` and will become an agency setting.
 - Phone, WhatsApp, and email quick actions use `ContactActions`, which explains the integration isn't connected and
@@ -106,6 +110,7 @@ Module conventions (follow for new modules):
 ## Workflow
 
 - Build in batches; **stop after each batch for review** and wait for explicit approval before the next module.
-  Done: Batch A (shell + dashboard), Batch B (leads + contacts), Batch C (properties).
+  Done: Batch A (shell + dashboard), Batch B (leads + contacts), Batch C (properties), Batch D (pipeline, tasks,
+  site visits).
 - Before finishing work run `npm run check` (lint → typecheck → production build) and fix what you broke.
 - Commit only when asked.

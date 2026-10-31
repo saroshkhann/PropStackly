@@ -1,4 +1,6 @@
 import { DEMO_NOW } from "@/config/app";
+import { isOpenStage } from "@/domain/deal";
+import { dayKey } from "@/lib/format";
 import { demoMembers } from "@/mocks/agency";
 import { demoDailyActivity, MONTHLY_SALES_TARGET_PKR } from "@/mocks/activity";
 import { demoDeals, pipelineStages } from "@/mocks/deals";
@@ -16,7 +18,11 @@ import type { DashboardData } from "./types";
  */
 export async function getDashboardData(agencyId: string, currentUserId: string): Promise<DashboardData> {
   const members = demoMembers.filter((m) => m.agencyId === agencyId);
-  const deals = demoDeals.filter((d) => d.agencyId === agencyId);
+  const currentMonth = dayKey(DEMO_NOW).slice(0, 7);
+  // Open deals plus deals closed this month, so "closed won" and the leaderboard reflect the current month.
+  const deals = demoDeals.filter(
+    (d) => d.agencyId === agencyId && (isOpenStage(d.stageId) || (d.closedAt !== null && dayKey(d.closedAt).startsWith(currentMonth))),
+  );
   const properties = demoProperties.filter((p) => p.agencyId === agencyId);
 
   const memberRef = (id: string | null): MemberRef | null => {

@@ -28,3 +28,9 @@ export function getAssignableAgents(agencyId: string): AgentOption[] {
       ).length,
     }));
 }
+
+/** Everyone in the agency, owners included, for work that isn't lead ownership (tasks, reviews). */
+export function getTeamOptions(agencyId: string): AgentOption[] {
+  const agents = new Map(getAssignableAgents(agencyId).map((agent) => [agent.id, agent]));
+  return getMembers(agencyId).map((member) => agents.get(member.id) ?? { id: member.id, name: member.name, title: member.title, openLeads: 0 });
+}
