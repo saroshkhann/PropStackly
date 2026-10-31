@@ -44,8 +44,8 @@ export const navigation: NavGroup[] = [
   {
     label: "Sales",
     items: [
-      { id: "leads", label: "Leads", href: "/leads", icon: UsersRound, description: "Capture, assign, and qualify inbound leads", badge: "newLeads" },
-      { id: "contacts", label: "Contacts", href: "/contacts", icon: Contact, description: "Buyers, sellers, landlords, and tenants" },
+      { id: "leads", label: "Leads", href: "/leads", icon: UsersRound, description: "Capture, assign, and qualify inbound leads", badge: "newLeads", available: true },
+      { id: "contacts", label: "Contacts", href: "/contacts", icon: Contact, description: "Buyers, sellers, landlords, and tenants", available: true },
       { id: "pipeline", label: "Pipeline", href: "/pipeline", icon: SquareKanban, description: "Track deals from inquiry to bayana and transfer" },
       { id: "tasks", label: "Follow-ups", href: "/tasks", icon: ListChecks, description: "Reminders, tasks, and follow-up cadences", badge: "tasksDueToday" },
       { id: "site-visits", label: "Site visits", href: "/site-visits", icon: CalendarClock, description: "Schedule and log property viewings" },
@@ -54,7 +54,7 @@ export const navigation: NavGroup[] = [
   {
     label: "Inventory",
     items: [
-      { id: "properties", label: "Properties", href: "/properties", icon: Building2, description: "Listings, owners, pricing, and media" },
+      { id: "properties", label: "Properties", href: "/properties", icon: Building2, description: "Listings, owners, pricing, and media", available: true },
     ],
   },
   {

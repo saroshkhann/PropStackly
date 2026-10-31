@@ -11,3 +11,9 @@ export const TRIAL_DURATION_HOURS = 72;
  * Replaced by real request time once the backend exists.
  */
 export const DEMO_NOW = "2026-10-31T10:30:00+05:00";
+
+/**
+ * Square feet per Marla. Lahore societies such as DHA and Bahria use 225; the revenue department uses 272.25.
+ * Kept as configuration so agencies can switch once agency settings exist.
+ */
+export const MARLA_SQFT = 225;

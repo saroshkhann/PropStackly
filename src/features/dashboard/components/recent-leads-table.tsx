@@ -25,13 +25,14 @@ import {
 import { Table, TableBody, TableCell, TableHead, TableHeader, TableRow } from "@/components/ui/table";
 import { EmptyState } from "@/components/shared/empty-state";
 import { SectionCard } from "@/components/shared/section-card";
+import { AgentChip } from "@/components/shared/agent-chip";
 import { UserAvatar } from "@/components/shared/user-avatar";
 import { LEAD_INTENT_LABELS } from "@/domain/lead";
 import { notifyDemoAction } from "@/lib/demo";
 import { formatPKRCompact, formatRelative } from "@/lib/format";
 import { cn } from "@/lib/utils";
 import type { RecentLead } from "../data/types";
-import { LeadStatusBadge } from "./lead-status-badge";
+import { LeadStatusBadge } from "@/features/leads/components/lead-badges";
 
 type ColumnMeta = { align?: "end"; className?: string };
 
@@ -102,17 +103,12 @@ function makeColumns(now: string) {
       header: "Status",
       cell: (info) => <LeadStatusBadge status={info.row.original.status} />,
     }),
-    helper.accessor((row) => row.assignedTo.name, {
+    helper.accessor((row) => row.assignedTo?.name ?? "", {
       id: "assignedTo",
       header: "Agent",
       sortFn: "text",
       meta: { className: "max-xl:hidden" },
-      cell: (info) => (
-        <div className="flex items-center gap-2">
-          <UserAvatar name={info.getValue()} size="xs" />
-          <span className="truncate text-secondary-foreground" title={info.getValue()}>{info.getValue().split(" ")[0]}</span>
-        </div>
-      ),
+      cell: (info) => <AgentChip name={info.row.original.assignedTo?.name ?? null} short />,
     }),
     helper.accessor("lastActivityAt", {
       header: "Last activity",

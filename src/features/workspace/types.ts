@@ -11,3 +11,13 @@ export interface WorkspaceContext {
   navBadges: Partial<Record<NavBadgeKey, number>>;
   now: string;
 }
+
+export interface MemberRef {
+  id: string;
+  name: string;
+}
+
+export interface AgentOption extends MemberRef {
+  title: string;
+  openLeads: number;
+}

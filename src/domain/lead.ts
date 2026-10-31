@@ -27,18 +27,35 @@ export const LEAD_INTENT_LABELS: Record<LeadIntent, string> = {
   invest: "Invest",
 };
 
+export type LeadPriority = "hot" | "warm" | "cold";
+
+export const LEAD_PRIORITY_LABELS: Record<LeadPriority, string> = {
+  hot: "Hot",
+  warm: "Warm",
+  cold: "Cold",
+};
+
+export const LEAD_STATUSES = Object.keys(LEAD_STATUS_LABELS) as LeadStatus[];
+export const LEAD_PRIORITIES = Object.keys(LEAD_PRIORITY_LABELS) as LeadPriority[];
+export const LEAD_INTENTS: LeadIntent[] = ["buy", "rent", "invest"];
+
+export const OPEN_LEAD_STATUSES: LeadStatus[] = ["new", "contacted", "qualified", "site_visit", "negotiation"];
+
 export interface Lead extends TenantScoped {
   id: string;
+  contactId: string;
   name: string;
   phoneMasked: string;
   status: LeadStatus;
+  priority: LeadPriority;
   sourceId: LeadSourceId;
   intent: LeadIntent;
   interest: string;
   location: string;
   budgetMinPKR: number;
   budgetMaxPKR: number;
-  assignedToId: string;
+  /** Null while a lead waits in the unassigned queue. */
+  assignedToId: string | null;
   createdAt: string;
   lastActivityAt: string;
 }

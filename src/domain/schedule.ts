@@ -6,6 +6,7 @@ export type FollowUpChannel = "call" | "whatsapp" | "meeting" | "email";
 export interface ScheduleItem extends TenantScoped {
   id: string;
   kind: ScheduleItemKind;
+  leadId: string | null;
   title: string;
   leadName: string;
   location: string | null;
@@ -13,4 +14,5 @@ export interface ScheduleItem extends TenantScoped {
   startsAt: string;
   assignedToId: string;
   priority: "high" | "normal";
+  completedAt: string | null;
 }

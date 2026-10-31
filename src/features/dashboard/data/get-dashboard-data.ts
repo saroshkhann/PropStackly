@@ -7,7 +7,8 @@ import { demoLeads } from "@/mocks/leads";
 import { demoProperties } from "@/mocks/properties";
 import { demoSchedule } from "@/mocks/schedule";
 import { agentLeaderboard, monthlySales, summarizeInventory, summarizePipeline } from "../lib/metrics";
-import type { DashboardData, MemberRef } from "./types";
+import type { MemberRef } from "@/features/workspace/types";
+import type { DashboardData } from "./types";
 
 /**
  * Dashboard read model for one agency. Every collection is filtered by `agencyId` here, mirroring
@@ -18,10 +19,12 @@ export async function getDashboardData(agencyId: string, currentUserId: string):
   const deals = demoDeals.filter((d) => d.agencyId === agencyId);
   const properties = demoProperties.filter((p) => p.agencyId === agencyId);
 
-  const memberRef = (id: string): MemberRef => {
-    const member = members.find((m) => m.id === id);
-    return { id, name: member?.name ?? "Unassigned" };
+  const memberRef = (id: string | null): MemberRef | null => {
+    const member = id ? members.find((m) => m.id === id) : undefined;
+    return member ? { id: member.id, name: member.name } : null;
   };
+  const nowMs = new Date(DEMO_NOW).getTime();
+  const horizonMs = nowMs + 48 * 3_600_000;
 
   return {
     now: DEMO_NOW,
@@ -34,7 +37,10 @@ export async function getDashboardData(agencyId: string, currentUserId: string):
     monthlyTargetPKR: MONTHLY_SALES_TARGET_PKR,
     leaderboard: agentLeaderboard(members, deals),
     schedule: demoSchedule
-      .filter((s) => s.agencyId === agencyId)
+      .filter((s) => {
+        const startsMs = new Date(s.startsAt).getTime();
+        return s.agencyId === agencyId && !s.completedAt && startsMs >= nowMs && startsMs <= horizonMs;
+      })
       .map((s) => ({ ...s, assignedTo: memberRef(s.assignedToId) })),
     recentLeads: demoLeads
       .filter((l) => l.agencyId === agencyId)

@@ -138,8 +138,12 @@ function ScheduleRow({ item, now, isNext }: { item: ScheduleEntry; now: string; 
             </p>
           )}
         </div>
-        <UserAvatar name={item.assignedTo.name} size="xs" className="mt-0.5" />
-        <span className="sr-only">Assigned to {item.assignedTo.name}</span>
+        {item.assignedTo && (
+          <>
+            <UserAvatar name={item.assignedTo.name} size="xs" className="mt-0.5" />
+            <span className="sr-only">Assigned to {item.assignedTo.name}</span>
+          </>
+        )}
       </button>
     </li>
   );

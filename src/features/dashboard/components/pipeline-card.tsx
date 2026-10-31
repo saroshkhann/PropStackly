@@ -4,7 +4,7 @@ import { Button } from "@/components/ui/button";
 import { SectionCard } from "@/components/shared/section-card";
 import { formatPKRCompact } from "@/lib/format";
 import type { DashboardData } from "../data/types";
-import { HorizontalBarList } from "./horizontal-bar-list";
+import { HorizontalBarList } from "@/components/charts/horizontal-bar-list";
 
 export function PipelineCard({ pipeline }: { pipeline: DashboardData["pipeline"] }) {
   return (

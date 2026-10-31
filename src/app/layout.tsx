@@ -21,7 +21,7 @@ export const viewport: Viewport = {
 export default function RootLayout({ children }: LayoutProps<"/">) {
   return (
     <html lang="en" className={`${geistSans.variable} ${geistMono.variable} h-full antialiased`}>
-      <body className="min-h-full">
+      <body className="min-h-full" suppressHydrationWarning>
         <MotionConfig reducedMotion="user">
           <TooltipProvider delayDuration={200}>{children}</TooltipProvider>
         </MotionConfig>

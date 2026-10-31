@@ -29,7 +29,7 @@ export async function getWorkspace(): Promise<WorkspaceContext> {
     notifications,
     navBadges: {
       newLeads: demoLeads.filter((l) => l.agencyId === agencyId && l.status === "new").length,
-      tasksDueToday: demoSchedule.filter((s) => s.agencyId === agencyId && dayKey(s.startsAt) === today).length,
+      tasksDueToday: demoSchedule.filter((s) => s.agencyId === agencyId && !s.completedAt && dayKey(s.startsAt) === today).length,
       unreadNotifications: notifications.filter((n) => !n.read).length,
     },
     now,

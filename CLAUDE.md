@@ -64,6 +64,15 @@ src/
 
 Keep domain logic out of components: compute in `domain/` or `features/*/lib/`, render in components.
 
+Module conventions (follow for new modules):
+- `features/<module>/data/` — `get-*.ts` read models taking `agencyId` first, plus `types.ts` for list/detail shapes.
+- `features/<module>/lib/` — filters, metrics, and Zod form schemas (`z.input`/`z.output` with `zodResolver`).
+- Forms use React Hook Form + `FormField` (label, hint, error, aria wiring) and `useWatch` (not `watch`).
+- Tables use TanStack Table v9 `useTable` with explicit `tableFeatures`; filtering happens before data reaches the
+  table; facet filters use `FacetFilter`; overview KPIs use `StatCard`.
+- Dynamic routes: `generateStaticParams` from the read model, read `params` inside `<Suspense>`, `notFound()` for ids
+  outside the agency, plus `loading.tsx`, `error.tsx` (`RouteError`), and `not-found.tsx`.
+
 ## Design system
 
 - Premium **light theme by default**. Tokens live in `src/app/globals.css` (`:root`): ink-navy brand, cool neutrals,
@@ -83,10 +92,20 @@ Keep domain logic out of components: compute in `domain/` or `features/*/lib/`, 
   agencies are fictional — never add real customer data.
 - Any UI-only action must call `notifyDemoAction()` (toast saying nothing was saved) or be visibly labelled demo /
   simulated / planned. Never imply persistence that doesn't exist.
+- Interactive prototype edits (add lead/contact, assign, change status, log notes, schedule follow-ups) update local
+  component state only, mark new records with `isDraft` ("Draft" / "Not saved" tags), and toast that the change resets
+  on reload. Draft records have no detail page.
+- Property pages share a `PropertySessionProvider` (properties layout) so drafts and edits survive client navigation
+  within the module until reload. Uploaded photos are local object-URL previews only — never sent anywhere — and are
+  revoked when the provider unmounts. Sample listing photos are generated artwork labelled "sample".
+- Areas are stored with their unit (`marla | kanal | sqft | sqyd`); convert with `domain/area.ts`. `MARLA_SQFT`
+  (225, Lahore society standard) lives in `config/app.ts` and will become an agency setting.
+- Phone, WhatsApp, and email quick actions use `ContactActions`, which explains the integration isn't connected and
+  offers to log the interaction instead. Never open `tel:`/`wa.me` links with demo data.
 
 ## Workflow
 
-- Build in batches; **stop after each batch for review**. Batch A (shell + dashboard) is complete; do not start
-  Batch B until the user approves the design.
+- Build in batches; **stop after each batch for review** and wait for explicit approval before the next module.
+  Done: Batch A (shell + dashboard), Batch B (leads + contacts), Batch C (properties).
 - Before finishing work run `npm run check` (lint → typecheck → production build) and fix what you broke.
 - Commit only when asked.

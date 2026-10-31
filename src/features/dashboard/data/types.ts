@@ -1,20 +1,16 @@
 import type { DailyActivity, MonthlySales } from "@/domain/analytics";
 import type { Lead, LeadSource, LeadSourceId } from "@/domain/lead";
 import type { ScheduleItem } from "@/domain/schedule";
+import type { MemberRef } from "@/features/workspace/types";
 import type { AgentPerformance, StageSummary } from "../lib/metrics";
 
-export interface MemberRef {
-  id: string;
-  name: string;
-}
-
 export interface RecentLead extends Lead {
-  assignedTo: MemberRef;
+  assignedTo: MemberRef | null;
   sourceLabel: string;
 }
 
 export interface ScheduleEntry extends ScheduleItem {
-  assignedTo: MemberRef;
+  assignedTo: MemberRef | null;
 }
 
 export interface DashboardData {

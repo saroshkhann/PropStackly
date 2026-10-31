@@ -1,7 +1,7 @@
 import { SectionCard } from "@/components/shared/section-card";
 import { formatNumber, formatPercent } from "@/lib/format";
 import type { SourceBreakdown } from "../lib/metrics";
-import { HorizontalBarList } from "./horizontal-bar-list";
+import { HorizontalBarList } from "@/components/charts/horizontal-bar-list";
 
 export function LeadSourcesCard({ sources, rangeLabel }: { sources: SourceBreakdown[]; rangeLabel: string }) {
   const top = sources[0];
